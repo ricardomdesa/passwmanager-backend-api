@@ -47,12 +47,14 @@ class Usuarios(Base):
         db_session.commit()
 
 
+def insereUserInicial():
+    user = Usuarios.query.filter_by(login='admin').first()
+    if not user:
+        userAdmin = Usuarios(login='admin', senha='suplatao')
+        userAdmin.save()
+
+
 def init_db():
     Base.metadata.create_all(bind=engine)
+    insereUserInicial()
 
-
-if __name__ == "__main__":
-    init_db()
-    user = Usuarios(login='Ricardo', senha='suplatao')
-    # user.save()
-    # print(Usuarios.query.filter_by(login="Ricardo").first())

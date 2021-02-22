@@ -42,8 +42,17 @@ class AddSenha(Resource):
         return resp
 
 
+class BuscaSenhaPorNome(Resource):
+    @auth.login_required
+    def get(self, nome):
+        senhas = Senhas.query.filter_by(nome=nome).all()
+        resp = [{'nome': i.nome, 'login': i.login, 'senha': i.senha} for i in senhas]
+        return resp
+
+
 api.add_resource(ListaSenhas, '/senhas')
 api.add_resource(AddSenha, '/nova-senha')
+api.add_resource(BuscaSenhaPorNome, '/busca-senha/<string:nome>')
 
 if __name__ == '__main__':
     init_db()
