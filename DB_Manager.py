@@ -15,6 +15,8 @@ class Usuarios(Base):
     id = Column(Integer, primary_key=True)
     login = Column(String(20), unique=True)
     senha = Column(String(20))
+    senhas = relationship("Senhas", cascade="all, delete")
+
 
     def __repr__(self):
         return f'<Usuario {self.login}'
@@ -32,6 +34,7 @@ class Categoria(Base):
     __tablename__ = 'categorias'
     id = Column(Integer, primary_key=True)
     nome = Column(String(20))
+    senhas = relationship("Senhas", cascade="all, delete")
 
     def __repr__(self):
         return f'<Categoria {self.nome}'
@@ -53,8 +56,8 @@ class Senhas(Base):
     nome = Column(String(40), index=True)
     login = Column(String(40))
     senha = Column(String(20))
-    usuario = relationship("Usuarios", cascade="all, delete")
-    categoria = relationship("Categoria", cascade="all, delete")
+    usuario = relationship("Usuarios")
+    categoria = relationship("Categoria")
 
     def __repr__(self):
         return f'<Senhas {self.nome}>'

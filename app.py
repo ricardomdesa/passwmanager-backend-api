@@ -86,7 +86,7 @@ class ModifySenha(Resource):
                 senha.login = dados['login']
                 senha.save()
                 resp = {'status': 'sucesso', 'mensagem': 'Senha alterada'}
-            if dados.get('senha'):
+            elif dados.get('senha'):
                 senha.senha = dados['senha']
                 senha.save()
                 resp = {'status': 'sucesso', 'mensagem': 'Senha alterada'}
@@ -236,5 +236,5 @@ api.add_resource(ModifyUser, '/users/<int:id>')
 
 if __name__ == '__main__':
     init_db()
-    # app.run(host='0.0.0.0')
-    app.run(debug=True)
+    app.run(host='0.0.0.0')
+    # app.run(debug=True)
