@@ -1,0 +1,18 @@
+version: "2"
+
+services:
+    app:
+        build: ./app
+        links:
+            - postgres
+        ports:
+            - "5000:5000"
+    postgres:
+        image: postgres
+        environment:
+            POSTGRES_DB: api_db
+            POSTGRES_USER: api
+            POSTGRES_PASSWORD: suplatao
+        volumes:
+            - ./db:/var/lib/postgresql/data
+

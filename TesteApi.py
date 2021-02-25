@@ -123,11 +123,11 @@ if __name__ == '__main__':
     teste.getAllUsers()
 
     # teste de senha
-    # teste.insereSenha()
+    teste.insereSenha()
     # teste.testeModifySenha(1)
     # teste.testeDeleteSenha(1)
     # teste.getSenhaByName('google3')
     # teste.getSenhaByCategoria('email2')
     # teste.getSenhaByCategoriaId(1)
 
-    # teste.getAllSenhas()
+    teste.getAllSenhas()

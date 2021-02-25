@@ -2,4 +2,4 @@
 __pycache__/
 senhas_db.db
 venv/
-
+docker/db

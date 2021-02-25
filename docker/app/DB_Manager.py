@@ -2,6 +2,7 @@ from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import scoped_session, sessionmaker, relationship
 from sqlalchemy.ext.declarative import declarative_base
 
+# engine = create_engine('sqlite:///senhas_db.db', convert_unicode=True)
 postgresuri = 'postgres://api:suplatao@postgres/api_db'
 sqliteUri = 'sqlite:///senhas_db.db'
 engine = create_engine(postgresuri, convert_unicode=True)
