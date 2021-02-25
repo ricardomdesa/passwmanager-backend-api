@@ -2,11 +2,10 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
 
-uriSqlite = 'sqlite:///senhas_db3.db'
-uriMysql = 'mysql+mysqlconnector://root:Suplatao1@localhost:3306/api_db'
+uriPsql = 'postgres://api:teste_api@postgres/api_db'
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "xxxxxxxx"
-app.config['SQLALCHEMY_DATABASE_URI'] = uriMysql
+app.config['SQLALCHEMY_DATABASE_URI'] = uriPsql
 db = SQLAlchemy(app)
 
 
@@ -73,7 +72,7 @@ class Senhas(db.Model):
 def insereUserInicial():
     user = Usuarios.query.filter_by(login='admin').first()
     if not user:
-        userAdmin = Usuarios(login='admin2', senha='suplatao')
+        userAdmin = Usuarios(login='admin2', senha='teste_api')
         userAdmin.save()
 
 

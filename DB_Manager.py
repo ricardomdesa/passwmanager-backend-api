@@ -2,7 +2,7 @@ from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import scoped_session, sessionmaker, relationship
 from sqlalchemy.ext.declarative import declarative_base
 
-postgresuri = 'postgres://api:suplatao@postgres/api_db'
+postgresuri = 'postgres://api:teste_api@postgres/api_db'
 sqliteUri = 'sqlite:///senhas_db.db'
 engine = create_engine(postgresuri, convert_unicode=True)
 
@@ -75,7 +75,7 @@ class Senhas(Base):
 def insereUserInicial():
     user = Usuarios.query.filter_by(login='admin').first()
     if not user:
-        userAdmin = Usuarios(login='admin', senha='suplatao')
+        userAdmin = Usuarios(login='admin', senha='teste1')
         userAdmin.save()
 
 

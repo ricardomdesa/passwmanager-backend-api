@@ -5,7 +5,7 @@ from requests.auth import HTTPBasicAuth
 class TesteApi():
     url = 'http://localhost:5000/'
     userLogado = 'ricardo'
-    senhaUser = 'suplatao1'
+    senhaUser = 'teste1'
 
     def testeAddUser(self):
         jsonPost = {
@@ -13,7 +13,7 @@ class TesteApi():
             "senha": self.senhaUser
         }
 
-        resp = requests.post(self.url + 'users', json=jsonPost, auth=HTTPBasicAuth('admin', 'suplatao'))
+        resp = requests.post(self.url + 'users', json=jsonPost, auth=HTTPBasicAuth('admin', 'teste1'))
         if not resp:
             print('POST resp vazio')
         else:
@@ -48,10 +48,10 @@ class TesteApi():
     ##### Senhas
     def insereSenha(self):
         jsonPost = {
-            "nome": "google3",
+            "nome": "google4",
             "login": "l@gmail.com",
             "senha": "12345",
-            "categoria": "email3"
+            "categoria": "email4"
         }
         resp = requests.post(self.url + 'senhas', json=jsonPost, auth=HTTPBasicAuth(self.userLogado, self.senhaUser))
         if not resp:
@@ -120,14 +120,14 @@ if __name__ == '__main__':
     # teste.testeAddUser()
     # teste.testeModifyUser(4)
     # teste.testeDeleteUser(2)
-    teste.getAllUsers()
+    # teste.getAllUsers()
 
     # teste de senha
     teste.insereSenha()
     # teste.testeModifySenha(1)
     # teste.testeDeleteSenha(1)
     # teste.getSenhaByName('google3')
-    # teste.getSenhaByCategoria('email2')
+    # teste.getSenhaByCategoria('email3')
     # teste.getSenhaByCategoriaId(1)
 
     teste.getAllSenhas()
