@@ -4,7 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 
 postgresuri = 'postgres://api:teste_api@postgres/api_db'
 sqliteUri = 'sqlite:///senhas_db.db'
-engine = create_engine(postgresuri, convert_unicode=True)
+engine = create_engine(sqliteUri, convert_unicode=True)
 
 db_session = scoped_session(sessionmaker(autocommit=False, bind=engine))
 

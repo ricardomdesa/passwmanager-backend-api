@@ -2,11 +2,13 @@ from flask import Flask, request
 from flask_restful import Api, Resource
 from DB_Manager import init_db, Senhas, Usuarios, Categoria
 from flask_httpauth import HTTPBasicAuth
+from flask_cors import CORS
 
 app = Flask(__name__)
 api = Api(app)
 auth = HTTPBasicAuth()
 currentLogin = ""
+cors = CORS(app, resources={r"*": {"/*": "*"}})
 
 
 # funcao para verificar usuario e senha
@@ -182,7 +184,7 @@ class Users(Resource):
     @auth.login_required
     def post(self):
         dados = request.json
-        usuario = Usuarios.query.filter_by(login=dados['login'], senha=dados['senha']).first()
+        usuario = Usuarios.query.filter_by(login=dados['login']).first()
         if not usuario:
             novoUsuario = Usuarios(login=dados['login'], senha=dados['senha'])
             novoUsuario.save()
@@ -195,6 +197,16 @@ class Users(Resource):
     def get(self):
         users = Usuarios.query.all()
         return [{'login': i.login, 'senha': i.senha, 'id': i.id} for i in users]
+
+
+class UsersByLogin(Resource):
+    @auth.login_required
+    def get(self, login):
+        user = Usuarios.query.filter_by(login=login).first()
+        if user:
+            return {'login': user.login, 'senha': user.senha}
+        else:
+            return {}
 
 
 class ModifyUser(Resource):
@@ -232,10 +244,11 @@ api.add_resource(BuscaSenhaPorNome, '/senhas-nome/<string:nome>')
 api.add_resource(BuscaSenhaPorCategoria, '/senhas-categoria/<string:categoria>')
 api.add_resource(BuscaSenhaPorCategoriaId, '/senhas-categoria/<int:categoriaId>')
 api.add_resource(Users, '/users')
+api.add_resource(UsersByLogin, '/users/<string:login>')
 api.add_resource(ModifyUser, '/users/<int:id>')
 
 
 if __name__ == '__main__':
     init_db()
-    app.run(host='0.0.0.0')
-    # app.run(debug=True)
+    # app.run(host='0.0.0.0')
+    app.run(debug=True)
