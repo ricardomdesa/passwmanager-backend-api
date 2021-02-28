@@ -4,7 +4,7 @@ from requests.auth import HTTPBasicAuth
 
 class TesteApi():
     url = 'http://localhost:5000/'
-    userLogado = 'ricardo'
+    userLogado = 'paty'
     senhaUser = 'teste1'
 
     def testeAddUser(self):
@@ -43,17 +43,23 @@ class TesteApi():
         else:
             print('GET all users', resp.json())
 
+    def testeGetUserById(self, id):
+        resp = requests.get(self.url + 'users/' + str(id), auth=HTTPBasicAuth(self.userLogado, self.senhaUser))
+        if not resp:
+            print('GET resp vazio')
+        else:
+            print('GET all users', resp.json())
 
 
     ##### Senhas
-    def insereSenha(self):
+    def insereSenha(self, userId):
         jsonPost = {
-            "nome": "google4",
+            "nome": "google1",
             "login": "l@gmail.com",
             "senha": "12345",
-            "categoria": "email4"
+            "categoria": "email1"
         }
-        resp = requests.post(self.url + 'senhas', json=jsonPost, auth=HTTPBasicAuth(self.userLogado, self.senhaUser))
+        resp = requests.post(self.url + 'senhas/' + str(userId), json=jsonPost, auth=HTTPBasicAuth(self.userLogado, self.senhaUser))
         if not resp:
             print('POST add senha resp vazio')
         else:
@@ -98,8 +104,8 @@ class TesteApi():
         else:
             print('GET senha por nome', resp.json())
 
-    def getAllSenhas(self):
-        resp = requests.get(self.url + 'senhas', auth=HTTPBasicAuth(self.userLogado, self.senhaUser))
+    def getSenhas(self, userId):
+        resp = requests.get(self.url + 'senhas/' + str(userId), auth=HTTPBasicAuth(self.userLogado, self.senhaUser))
         if not resp:
             print('GET todas senhas resp vazio')
         else:
@@ -118,16 +124,17 @@ if __name__ == '__main__':
 
     #teste de users
     # teste.testeAddUser()
+    # teste.testeGetUserById(2)
     # teste.testeModifyUser(4)
     # teste.testeDeleteUser(2)
     # teste.getAllUsers()
 
     # teste de senha
-    teste.insereSenha()
+    # teste.insereSenha(2)
+    # teste.getSenhas(2)
     # teste.testeModifySenha(1)
     # teste.testeDeleteSenha(1)
     # teste.getSenhaByName('google3')
     # teste.getSenhaByCategoria('email3')
     # teste.getSenhaByCategoriaId(1)
 
-    teste.getAllSenhas()

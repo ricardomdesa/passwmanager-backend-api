@@ -24,7 +24,7 @@ def verificaLogin(login, senha):
 class Senha(Resource):
     # Adiciona uma nova senha, com nome, login, senha, categoria e usuario
     @auth.login_required
-    def post(self):
+    def post(self, userId):
         dados = request.json
         categoriaId = 0
         try:
@@ -35,11 +35,11 @@ class Senha(Resource):
                 categoriaId = newCat.id
             else:
                 categoriaId = cat.id
-            user = Usuarios.query.filter_by(login=currentLogin).first()
+            user = Usuarios.query.filter_by(id=userId).first()
             if user:
                 senha = Senhas(nome=dados['nome'], login=dados['login'],
                                senha=dados['senha'], categoria_id=categoriaId,
-                               usuario_id=user.id)
+                               usuario_id=userId)
                 senha.save()
                 resp = {
                         'nome': dados['nome'],
@@ -54,21 +54,18 @@ class Senha(Resource):
 
     # Lista as senhas cadastradas de acordo com o usuario logado
     @auth.login_required
-    def get(self):
-        global currentLogin
+    def get(self, userId):
         try:
             resp = []
-            usuarioLogado = Usuarios.query.filter_by(login=currentLogin).first()
-            senhas = Senhas.query.filter_by(usuario_id=usuarioLogado.id).all()
+            senhas = Senhas.query.filter_by(usuario_id=userId).all()
             if senhas:
                 for i in senhas:
-                    userName = Usuarios.query.filter_by(id=i.usuario_id).first().login
                     categoria = Categoria.query.filter_by(id=i.categoria_id).first().nome
                     resp.append({
                         'nome': i.nome,
                         'login': i.login,
                         'senha': i.senha,
-                        'usuario': userName,
+                        'usuario': i.usuario_id,
                         'categoria': categoria
                     })
             else:
@@ -206,7 +203,7 @@ class UsersByLogin(Resource):
         if user:
             return {'login': user.login, 'senha': user.senha}
         else:
-            return {}
+            return {'status': 'erro', 'mensagem': 'Usuario não encontrado'}
 
 
 class ModifyUser(Resource):
@@ -238,17 +235,29 @@ class ModifyUser(Resource):
         return resp
 
 
-api.add_resource(Senha, '/senhas')
+class UserById(Resource):
+    @auth.login_required
+    def get(self, id):
+        user = Usuarios.query.filter_by(id=id).first()
+        if user:
+            resp = {'id': user.id, 'login': user.login, 'senha': user.senha}
+        else:
+            resp = {'status': 'erro', 'mensagem': 'Usuario nao existe'}
+        return resp
+
+
+api.add_resource(Senha, '/senhas/<int:userId>')
 api.add_resource(ModifySenha, '/senhas/<int:id>')
 api.add_resource(BuscaSenhaPorNome, '/senhas-nome/<string:nome>')
 api.add_resource(BuscaSenhaPorCategoria, '/senhas-categoria/<string:categoria>')
 api.add_resource(BuscaSenhaPorCategoriaId, '/senhas-categoria/<int:categoriaId>')
 api.add_resource(Users, '/users')
 api.add_resource(UsersByLogin, '/users/<string:login>')
+api.add_resource(UserById, '/users/<int:id>')
 api.add_resource(ModifyUser, '/users/<int:id>')
 
 
 if __name__ == '__main__':
     init_db()
-    # app.run(host='0.0.0.0')
-    app.run(debug=True)
+    app.run(host='0.0.0.0')
+    #app.run(debug=True)
