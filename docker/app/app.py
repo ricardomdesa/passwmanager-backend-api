@@ -201,7 +201,7 @@ class UsersByLogin(Resource):
     def get(self, login):
         user = Usuarios.query.filter_by(login=login).first()
         if user:
-            return {'login': user.login, 'senha': user.senha}
+            return {'id': user.id,'login': user.login, 'senha': user.senha}
         else:
             return {'status': 'erro', 'mensagem': 'Usuario não encontrado'}
 
