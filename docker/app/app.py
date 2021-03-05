@@ -47,9 +47,9 @@ class Senha(Resource):
                         'senha': dados['senha'],
                         'usuario_id': user.id,
                         'categoria_id': categoriaId
-                    }
+                    }, 200
         except AttributeError:
-            resp = {'status': 'Erro post senhas'}
+            resp = [], 404
         return resp
 
     # Lista as senhas cadastradas de acordo com o usuario logado
@@ -69,9 +69,9 @@ class Senha(Resource):
                         'categoria': categoria
                     })
             else:
-                resp = {'status': 'Erro', 'mensagem': 'Usuario nao encontrado'}
+                resp = [], 404
         except AttributeError:
-            resp = {'status': 'Erro get senhas'}
+            resp = {'status': 'Erro get senhas'}, 404
         return resp
 
 
@@ -85,15 +85,15 @@ class ModifySenha(Resource):
             if dados.get('login'):
                 senha.login = dados['login']
                 senha.save()
-                resp = {'status': 'sucesso', 'mensagem': 'Senha alterada'}
+                resp = {'status': 'sucesso', 'mensagem': 'Senha alterada'}, 200
             elif dados.get('senha'):
                 senha.senha = dados['senha']
                 senha.save()
-                resp = {'status': 'sucesso', 'mensagem': 'Senha alterada'}
+                resp = {'status': 'sucesso', 'mensagem': 'Senha alterada'}, 200
             else:
-                resp = {'status': 'erro', 'mensagem': 'Nada a alterar. Verifique o json'}
+                resp = {'status': 'erro', 'mensagem': 'Nada a alterar. Verifique o json'}, 404
         else:
-            resp = {'status': 'erro', 'mensagem': 'Senha não existe'}
+            resp = {'status': 'erro', 'mensagem': 'Senha não existe'}, 404
         return resp
 
     # delete senha
@@ -102,9 +102,9 @@ class ModifySenha(Resource):
         try:
             senha = Senhas.query.filter_by(id=id).first()
             senha.delete()
-            resp = {'status': 'sucesso', 'mensagem': 'Senha removida'}
+            resp = {'status': 'sucesso', 'mensagem': 'Senha removida'}, 200
         except AttributeError:
-            resp = {'status': 'erro', 'mensagem': 'Senha não existe'}
+            resp = {'status': 'erro', 'mensagem': 'Senha não existe'}, 404
         return resp
 
 
@@ -114,7 +114,7 @@ class BuscaSenhaPorNome(Resource):
     def get(self, nome):
         usuarioLogado = Usuarios.query.filter_by(login=currentLogin).first()
         senhas = Senhas.query.filter_by(usuario_id=usuarioLogado.id, nome=nome).all()
-        resp = []
+        resp = [], 200
         for i in senhas:
             userName = Usuarios.query.filter_by(id=i.usuario_id).first().login
             categoria = Categoria.query.filter_by(id=i.categoria_id).first().nome
@@ -136,7 +136,7 @@ class BuscaSenhaPorCategoria(Resource):
         if cat:
             usuarioLogado = Usuarios.query.filter_by(login=currentLogin).first()
             senhas = Senhas.query.filter_by(usuario_id=usuarioLogado.id, categoria_id=cat.id).all()
-            resp = []
+            resp = [], 200
             for i in senhas:
                 userName = Usuarios.query.filter_by(id=i.usuario_id).first().login
                 categoria = Categoria.query.filter_by(id=i.categoria_id).first().nome
@@ -148,7 +148,7 @@ class BuscaSenhaPorCategoria(Resource):
                     'categoria': categoria
                 })
         else:
-            resp = {'status': 'erro', 'mensagem': 'Categoria nao encontrada'}
+            resp = [], 404
         return resp
 
 
@@ -160,7 +160,7 @@ class BuscaSenhaPorCategoriaId(Resource):
         if cat:
             usuarioLogado = Usuarios.query.filter_by(login=currentLogin).first()
             senhas = Senhas.query.filter_by(usuario_id=usuarioLogado.id, categoria_id=cat.id).all()
-            resp = []
+            resp = [], 200
             for i in senhas:
                 userName = Usuarios.query.filter_by(id=i.usuario_id).first().login
                 categoria = Categoria.query.filter_by(id=i.categoria_id).first().nome
@@ -172,7 +172,7 @@ class BuscaSenhaPorCategoriaId(Resource):
                     'categoria': categoria
                 })
         else:
-            resp = {'status': 'erro', 'mensagem': 'Categoria nao encontrada'}
+            resp = [], 404
         return resp
 
 
@@ -185,15 +185,15 @@ class Users(Resource):
         if not usuario:
             novoUsuario = Usuarios(login=dados['login'], senha=dados['senha'])
             novoUsuario.save()
-            return {'status': 'sucesso', 'mensagem': 'Usuario adicionado'}
+            return {'status': 'sucesso', 'mensagem': 'Usuario adicionado'}, 200
         else:
-            return {'status': 'erro', 'mensagem': 'Usuario já existe'}
+            return {'status': 'erro', 'mensagem': 'Usuario já existe'}, 404
 
     # lista os usuarios cadastrados
     @auth.login_required
     def get(self):
         users = Usuarios.query.all()
-        return [{'login': i.login, 'senha': i.senha, 'id': i.id} for i in users]
+        return [{'login': i.login, 'senha': i.senha, 'id': i.id} for i in users], 200
 
 
 class UsersByLogin(Resource):
@@ -201,9 +201,9 @@ class UsersByLogin(Resource):
     def get(self, login):
         user = Usuarios.query.filter_by(login=login).first()
         if user:
-            return {'id': user.id,'login': user.login, 'senha': user.senha}
+            return {'id': user.id,'login': user.login, 'senha': user.senha}, 200
         else:
-            return {'status': 'erro', 'mensagem': 'Usuario não encontrado'}
+            return {}, 404
 
 
 class ModifyUser(Resource):
@@ -216,11 +216,11 @@ class ModifyUser(Resource):
             if dados.get('senha'):
                 user.senha = dados['senha']
                 user.save()
-                resp = {'status': 'sucesso', 'mensagem': 'Senha de usuario alterada'}
+                resp = {'status': 'sucesso', 'mensagem': 'Senha de usuario alterada'}, 200
             else:
-                resp = {'status': 'erro', 'mensagem': 'Nada a alterar. Verifique o json'}
+                resp = {'status': 'erro', 'mensagem': 'Nada a alterar. Verifique o json'}, 404
         else:
-            resp = {'status': 'erro', 'mensagem': 'Usuario não existe'}
+            resp = {'status': 'erro', 'mensagem': 'Usuario não existe'}, 404
         return resp
 
     # delete usuario
@@ -229,9 +229,9 @@ class ModifyUser(Resource):
         try:
             user = Usuarios.query.filter_by(id=id).first()
             user.delete()
-            resp = {'status': 'sucesso', 'mensagem': 'Usuario removido'}
+            resp = {'status': 'sucesso', 'mensagem': 'Usuario removido'}, 200
         except AttributeError:
-            resp = {'status': 'erro', 'mensagem': 'Usuario não existe'}
+            resp = {'status': 'erro', 'mensagem': 'Usuario não existe'}, 404
         return resp
 
 
@@ -240,9 +240,9 @@ class UserById(Resource):
     def get(self, id):
         user = Usuarios.query.filter_by(id=id).first()
         if user:
-            resp = {'id': user.id, 'login': user.login, 'senha': user.senha}
+            resp = {'id': user.id, 'login': user.login, 'senha': user.senha}, 200
         else:
-            resp = {'status': 'erro', 'mensagem': 'Usuario nao existe'}
+            resp = {}, 404
         return resp
 
 

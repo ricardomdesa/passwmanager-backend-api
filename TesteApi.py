@@ -123,15 +123,15 @@ if __name__ == '__main__':
     teste = TesteApi()
 
     #teste de users
-    # teste.testeAddUser()
+    teste.testeAddUser()
     # teste.testeGetUserById(2)
     # teste.testeModifyUser(4)
     # teste.testeDeleteUser(2)
-    # teste.getAllUsers()
+    teste.getAllUsers()
 
     # teste de senha
-    # teste.insereSenha(2)
-    # teste.getSenhas(2)
+    teste.insereSenha(1)
+    teste.getSenhas(1)
     # teste.testeModifySenha(1)
     # teste.testeDeleteSenha(1)
     # teste.getSenhaByName('google3')
